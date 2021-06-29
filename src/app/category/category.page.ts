@@ -78,6 +78,7 @@ export class CategoryPage implements OnInit {
     private helper: HelperService,
     public menu: MenuController,
     private nativeGeocoder: NativeGeocoder,
+    private zone: NgZone
   ) {
     this.menu.enable(false);
     this.locationCoords = {
@@ -285,9 +286,15 @@ export class CategoryPage implements OnInit {
     const quesCat = ques?.categorywithqestions;
     for (const q of quesCat) {
       if (q.q_type === 'dont_ask' && !q.api_response) {
-        q.api_response = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
+        await this.zone.run(async () => {
+          q.api_response = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
+          this.helper.dismissLoading();
+        });
       } else {
-        this.ques = ques;
+        this.zone.run(() => {
+          this.ques = ques;
+          this.helper.dismissLoading();
+        });
       }
     }
   }
