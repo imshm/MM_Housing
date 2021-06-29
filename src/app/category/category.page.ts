@@ -92,7 +92,7 @@ export class CategoryPage implements OnInit {
   backButtonEvent(){
     this.platform.backButton.subscribe(() => {
       // console.log ('exit');
-      navigator.app.exitApp();
+      // navigator.app.exitApp();
     });
   }
 
@@ -266,7 +266,7 @@ export class CategoryPage implements OnInit {
       this.api.postApi('categoryquestion_googleapi', body).then((res: any) => {
         this.helper.dismissLoading();
         if (res && res.status && res.status == 200 && res.data) {
-          return (res.data);
+          return resolve(res.data);
         } else {
           return resolve(null);
         }
@@ -283,13 +283,13 @@ export class CategoryPage implements OnInit {
     this.currentQuestion = currentQuestion;
     const ques = this.questionList[currentQuestion - 1];
     const quesCat = ques?.categorywithqestions;
-    quesCat.forEach(async (q) => {
+    for (const q of quesCat) {
       if (q.q_type === 'dont_ask' && !q.api_response) {
         q.api_response = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
       } else {
         this.ques = ques;
       }
-    });
+    }
   }
 // question load
   async loadQuestionOld(currentQuestion){
