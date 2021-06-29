@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+          <!-- <ion-menu-button autoHide="false"></ion-menu-button> -->
+          <ion-button ion-button (click)="closeModal()">Close</ion-button>
+      </ion-buttons>
+      <ion-title style="font-weight:bold;font-size:small;">The Location,Location,Location Scorecard</ion-title>    
+  </ion-toolbar>
+</ion-header>
+<ion-content >
+
+  <!-- <div class="header-00" style="background-color: #202020;">
+      <h1> <span style="font-weight: 500;color:white;">Score Board</span> </h1>
+  </div> -->
+  <div class="header-00">
+    <h1> <span style="font-weight: 500;">Please choose </span> </h1>
+  </div>
+ <!-- <div class="map-wrapper">
+  <div #map id="map"></div>
+</div> -->
+<!-- <div id="map"></div> -->
+
+<!-- <ion-slides style="width: 100%; height: 200px !important; border-bottom: 7px solid #FFF;" [options]="{autoPlay: 5000, loop: true, speed:200, paginationType: 'fraction'}" pager="true"
+#mySlider (ionSlidesDidLoad)="slidesDidLoad(mySlider) " 
+> -->
+<!-- <ion-slides  class = "slider" #slider  (ionSlidesDidLoad)="slidesDidLoad(slider ) " style="width: 100%; height: 200px !important; border-bottom: 7px solid #FFF;" [options]="{ autoPlay: 5000, loop: true, speed:200, paginationType: 'fraction'}" pager="true">
+    <ion-slide *ngFor="let item of id">
+       
+        <div [id]='"map"+ item.Id' class= "m" data-tap-disabled="true" data-tap-disabled="true" (click)="submit('map'+ item.Id)"></div>
+        
+        
+    </ion-slide> 
+    
+</ion-slides> -->
+  <div style="width: 100%; height: 200px !important; border-bottom: 7px solid #FFF;" >
+        <div id='mapmap1' class= "m"></div>
+  </div>
+  <ion-list>
+    <ion-item lines= "none" style="text-align: center;">
+     
+    <ion-input type="text" style="border: 1px solid black;" name="username" [(ngModel)]="data.username" placeholder="Please input data.." ></ion-input>
+    
+    </ion-item>
+    <ion-item  lines= "none" style="text-align: center;" >
+      <ion-label> <ion-button ion-button color="danger" outline="true" style='color:white;height:5vh;' (click)="submit(data.username)" outline >Submit</ion-button>
+   </ion-label>
+   </ion-item>
+   
+   </ion-list>
+</ion-content>

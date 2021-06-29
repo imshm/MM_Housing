@@ -1,0 +1,50 @@
+.noShadow {
+  --box-shadow: none !important;
+}
+ion-searchbar {
+  input{
+    padding-inline-start: 16px !important;
+    padding-inline-end: 80px !important;
+  }
+  ion-icon {
+    right: 16px !important;
+    left: auto !important;
+    color: #ffffff !important;
+  }
+  button.searchbar-clear-button{
+    right: 42px !important;
+  }
+}
+.noDataDiv{
+  display: table;
+  margin: 20px auto;
+  text-align: center;
+  ion-icon{
+    font-size: 150px;
+  }
+}
+.headerMain{
+  box-shadow:0 0 1px 0 rgba(0, 0, 0, .4);
+  background: linear-gradient(to bottom, rgba(249, 29, 29, 0.9), rgba(255, 45, 45, 0.9));
+  ion-title{
+    font-weight:bold;
+    font-size:medium;
+  }
+}
+.boldText{
+  font-weight: 500;
+}
+.vr-card{
+  .img-container{
+    position: relative;
+    .play-indicator {
+      position: absolute !important;
+      top: 50%;
+      left: 50%;
+      width: 64px;
+      margin-left: -32px;
+      margin-top: -32px;
+      opacity: 0.9;
+    }
+  }
+}

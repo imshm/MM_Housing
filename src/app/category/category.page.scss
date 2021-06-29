@@ -1,0 +1,73 @@
+
+.inline-group
+{
+    display:flex;
+    align-items: center;
+}
+.hcs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 30px;
+}
+.myCustomSelect{
+    min-width: 100% !important;
+    min-height:100% !important ;
+    max-width: 100% !important;
+   }
+    ion-select::part(text){
+   // color: #545ca7;
+    white-space:pre-wrap;
+  }
+  .icon {
+    display: inline-block;
+    font-size: 35px;
+    color: #ffC977;
+    vertical-align: middle;
+   }
+   
+   .text{
+     display: inline-block;
+     vertical-align: middle;
+   }
+   .alert-sub-title.sc-ion-alert-md, .alert-title.sc-ion-alert-md {
+    color: #b32224;
+  }
+    // .m {
+//     width: 100%;
+//     height: 100%;
+//     opacity: 0;
+//     transition: opacity 150ms ease-in;
+//     display: block;
+//     &.show-map{
+//       opacity: 1;
+//     }
+//   }
+// #map_canvas {
+//     width: 90%;
+//     height: 80%;
+//     border: 1px solid red;
+//   }
+   
+   
+//   #address {
+//     padding: 10px;
+//     font-size: 18px;
+//     font-weight: bold;
+//   }
+   
+//   #map {
+//     width: 100%;
+//     height: 100%;
+//     opacity: 0;
+//     transition: opacity 150ms ease-in;
+//     display: block;
+//     &.show-map{
+//         opacity: 1;
+//       }
+//   }
+   
+//   .map-wrapper {
+//     position: relative;
+//   }
+  

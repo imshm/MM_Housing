@@ -1,0 +1,8 @@
+{
+  "name": "Mindz",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

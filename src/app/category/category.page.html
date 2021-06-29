@@ -1,0 +1,526 @@
+<ion-header style="box-shadow:0 0 1px 0 rgba(0, 0, 0, .4);background: linear-gradient(to bottom, rgba(249, 29, 29, 0.9), rgba(255, 45, 45, 0.9));">
+  <ion-toolbar color="primary">
+    <!-- <ion-title style="font-weight:bold;font-size:medium;" >Calculot</ion-title> -->
+      <!-- <ion-buttons slot="start">
+          <ion-menu-button autoHide="false"></ion-menu-button>
+      </ion-buttons> -->
+      <ion-title >
+        <!-- <div style="margin-left: 35%;"> -->
+          <center><img alt="logo" style="height: 40px ;" src="assets/housing.png"></center>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content #pageTop *ngIf="((show == false) && (locationCoords.longitude != ''))  && currentQuestion" >
+  <ion-card >
+    <ion-card-header style="text-align:center;color:Green;font-size:20px;font-weight: bold;">
+      <span item-left>{{ques.new_id}}:  {{ques.title}}  </span>
+      <!-- <span item-left>{{currentQuestion}}:  {{ques.title}}  </span> -->
+      <span item-right><ion-icon  name="information-circle-outline" *ngIf="ques.refs_info" (click)="information_show(ques.refs_info)"></ion-icon> </span>
+    </ion-card-header>
+    <ion-card-content style="text-align:center;color:Green;font-size:13px;" *ngIf="ques.options_detail">
+      {{ques.options_detail}}
+    </ion-card-content>
+  </ion-card>
+<!-- <form> -->
+<!-- show question with yes and no type  -->
+  <div *ngFor="let option of ques.categorywithqestions">
+    <ion-card  *ngIf="(ques.multiple == '0') && (ques.options == '0')">
+      <!-- <ion-card  *ngIf="(ques.options == '0')"> -->
+      <!-- relatedquestions with question show null value-->
+      <ion-item class="item-text-wrap" lines="none"*ngIf="option.relatedquestions.length == 0">    
+          <ion-label class="ion-text-wrap" > {{option.title}}
+            <div *ngFor="let option1 of filteredKeywords" style=" display: inline-block;"> 
+              <span style="color:#f96764 ;display: inline-block;
+              vertical-align: middle;" *ngIf="(option1 == option.id) && (show_sign == false) "  >* </span>
+               <span style="color:#f96764 ;display: inline-block;
+               vertical-align: middle;" *ngIf="(show_sign == true)"  > </span>
+            </div>  
+         <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon> 
+        
+         
+      </ion-label>
+      
+      </ion-item>
+      <ion-item class="item-text-wrap" lines="none" *ngIf="option.api_response">
+        <ion-label  class="ion-text-wrap" style= "font-weight: bold;"> {{option.api_response}}</ion-label>
+      </ion-item>
+      <!-- relatedquestions with question value -->
+      <!-- <ion-grid *ngIf="option.relatedquestions.length != 0" >
+        <ion-row>
+          <ion-col size="11">
+            <div *ngFor="let option1 of option.relatedquestions">
+            <ion-label style="font-size: 20px;"class="ion-text-wrap" *ngIf="(option.id != data1) && (option1.id != data1) ">Tap to select</ion-label>
+            <ion-item lines="none" *ngIf="(option.id == data1)" > 
+              <ion-label *ngIf="(title)" class="ion-text-wrap">{{ title }} 
+                <span style="color:#f96764" *ngIf="!option.selectedItem">* </span>
+                  <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon>
+                </ion-label>
+            </ion-item>
+            <ion-item lines="none" *ngIf="(option1.id == data1) "> 
+                <ion-label *ngIf="(title)" class="ion-text-wrap">{{ title }} 
+                  <span style="color:#f96764" *ngIf="!option.selectedItem">* </span>
+                  <ion-icon slot="end" name="information-circle-outline" *ngIf="option1.refs_info" (click)="information_show(option1.refs_info)"></ion-icon> 
+                  </ion-label>
+            </ion-item>
+            </div>
+          </ion-col> 
+          <ion-col size="1">
+          <ion-icon  (click)="presentAlertRadio(option.id)" name="caret-down-outline" style="zoom:2.0;"></ion-icon> 
+          </ion-col>
+        </ion-row>
+      </ion-grid> -->
+    <!-- <ion-item lines="none" *ngIf="option.relatedquestions.length != 0" (click)="presentAlertRadio(option.id)">  
+   <div *ngIf="option.id == id3" >
+    <ion-label *ngIf="data1" class="ion-text-wrap">{{ title }} 
+       <ion-icon  slot="end" name="information-circle-outline" (click)="information_show(option.id)"></ion-icon>? </ion-label>
+      </div>
+    </ion-item> -->
+      <!-- relatedquestions with value -->
+      <!-- <ion-item lines="none" *ngIf="option.relatedquestions.length != 0">  
+          <ion-select (click)="selectedOption(option.id)" [placeholder]="'Tap to select..'">
+            <ion-select-option value="{{ option.id }}" > 
+              {{ option.title }}
+            </ion-select-option>
+            <ion-select-option *ngFor="let option1 of option.relatedquestions" value="{{ option1.id }}">
+              {{ option1.title }}
+            </ion-select-option>
+          </ion-select> 
+      </ion-item>-->
+          <!-- <ion-item lines="none" *ngIf="option.relatedquestions.length != 0">  
+          <ion-select [interfaceOptions]="customAlertOptions" interface="alert" mode="md" class= "myCustomSelect" [(ngModel)]="local" (ionChange)="selectedOption($event)" [placeholder]="'Tap to select..'">
+          <ion-select-option  [value]="option.id" >{{ option.title }}?</ion-select-option>
+            <ion-select-option  *ngFor="let option1 of option.relatedquestions" [value]="option1.id"> 
+                <ion-label>{{ option1.title }}?</ion-label> 
+            </ion-select-option>
+          </ion-select>
+          <ion-icon slot="end" color="success" name="information-circle-outline" (click)="information_show(option.id)"></ion-icon>
+      </ion-item> -->
+    
+<!-- first value of dropdown option box from categorywithqestions -->
+    <div *ngIf="(option.relatedquestions.length == 0) || ((showradio == true) && (add == option.id) )">
+        <ion-radio-group  (ionChange)="radioGroupChange($event,option)" [(ngModel)]="option.selectedItem" [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+          <ion-grid>
+            <ion-row> 
+              <ion-col size="6"> 
+                <ion-item lines="none">
+                <ion-radio  mode="md" value="yes" checked="true"></ion-radio> 
+               &nbsp; &nbsp; <ion-label>Yes</ion-label>
+              </ion-item> </ion-col>
+              <ion-col size="6">
+                <ion-item lines="none">                 
+                <ion-radio  mode="md" value="no" ></ion-radio> 
+                &nbsp; &nbsp;<ion-label >No</ion-label>
+               </ion-item> </ion-col>
+            </ion-row>
+          </ion-grid> 
+        </ion-radio-group>
+        
+    </div>
+<!-- second option  dropdown value from relatedquestions  -->
+    <!-- <div *ngFor="let option1 of option.relatedquestions">
+        <ion-radio-group  (ionChange)="radioGroupChange1($event,option1,option.cat,option.q_type)" *ngIf="((showradio) && (add == option1.id))"  [(ngModel)]="option1.selectedItem1" [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+          <ion-grid>
+            <ion-row>
+               <ion-col size="6"> 
+                <ion-item lines="none">
+                  <ion-radio  mode="md"   value="yes"></ion-radio> 
+               &nbsp; &nbsp; <ion-label>Yes</ion-label> </ion-item>
+              </ion-col>
+               <ion-col size="6">
+                <ion-item lines="none">
+                <ion-radio  mode="md"  value="no"></ion-radio> 
+                &nbsp; &nbsp;<ion-label>No</ion-label>
+                 </ion-item>
+              </ion-col> 
+            </ion-row>
+        </ion-grid> 
+      </ion-radio-group>
+    </div> -->
+    
+    
+    </ion-card>
+  </div>
+
+<!-- show radio button when choose only one for category 15 and 20-->
+<ion-card *ngIf="(ques.multiple == '0') && (ques.options == '1')" >
+    <div >
+      <ion-radio-group  (ionChange)="radioGroupChange4($event)" [(ngModel)]="ques.categoryanswer" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+        <ion-list>
+          <ion-item lines="none" *ngFor="let option of ques.categorywithqestions"> 
+            <ion-row style="width:100%;">
+            <ion-col size="11"> 
+            <div>
+              <ion-label class="ion-text-wrap">{{option.title}}
+                <!-- <span style="color:#f96764" *ngIf="(show_sign == false)" >* </span>
+                <span style="color:#f96764" *ngIf="(show_sign == true)"  > </span> -->
+                <div *ngFor="let option1 of filteredKeywords" style=" display: inline-block;"> 
+                  <span style="color:#f96764 ;display: inline-block;
+                  vertical-align: middle;" *ngIf="(option1 == option.id) && (show_sign == false) "  >* </span>
+                   <span style="color:#f96764 ;display: inline-block;
+                   vertical-align: middle;" *ngIf="(show_sign == true)"  > </span>
+                </div> 
+                <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon> 
+                </ion-label>
+              </div>
+              </ion-col >
+            <ion-col size="1" >
+           <ion-radio mode="md"  style="margin-left:-5px;" value="{{option.id}}"></ion-radio>
+          </ion-col>
+          </ion-row>
+          </ion-item> 
+           </ion-list> 
+        </ion-radio-group> 
+
+        <!-- <div *ngIf="(showradio == true) && (add == option.id)"> 
+          <ion-radio-group  (ionChange)="radioGroupChange3($event,option)" [(ngModel)]="option.selectedItem3"  [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+       
+          <ion-grid>         
+            <ion-row> 
+              <ion-col size="6" >
+                <ion-item lines="none">
+                 
+                <ion-radio mode="md"  value="yes"></ion-radio> 
+                &nbsp; &nbsp; <ion-label >Yes</ion-label> 
+              </ion-item> 
+             </ion-col>
+              <ion-col size="6">
+                <ion-item lines="none">
+                 
+                 <ion-radio mode="md"  value="no"></ion-radio> 
+                &nbsp; &nbsp; <ion-label >No</ion-label>
+               </ion-item>
+              </ion-col> 
+            </ion-row>
+          </ion-grid>
+          </ion-radio-group>
+        </div>  -->
+      </div> 
+</ion-card>
+
+<!-- show radio button show one page one question for category 1,6,19,21-->
+<div *ngIf="(ques.multiple == '1') && (ques.options == '0')">
+  <ion-card *ngFor="let option of ques.categorywithqestions">
+    <!-- relatedquestions with question show null value-->
+    <ion-item lines="none" >    
+        <ion-label class="ion-text-wrap">{{option.title}}
+          <!-- <h1 *ngFor="let option1 of filteredKeywords" >  -->
+            <!-- <span style="color:#f96764" *ngIf="(show_sign == false)">* </span>
+            <span style="color:#f96764" *ngIf="(show_sign == true)"> </span> -->
+            <div *ngFor="let option1 of filteredKeywords" style=" display: inline-block;"> 
+              <span style="color:#f96764 ;display: inline-block;
+              vertical-align: middle;" *ngIf="(option1 == option.id) && (show_sign == false) "  >* </span>
+               <span style="color:#f96764 ;display: inline-block;
+               vertical-align: middle;" *ngIf="(show_sign == true)"  > </span>
+            </div>  
+          <!-- </h1>   -->
+       <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon> 
+      
+       
+    </ion-label>
+  </ion-item>
+ 
+<ion-item lines="none" *ngFor="let option_rel of option.relatedquestions">
+    <ion-label class="ion-text-wrap" >{{option_rel.title}}
+      <!-- <h1 *ngFor="let option1 of filteredKeywords" >  -->
+        <!-- <span style="color:#f96764" *ngIf="(show_sign == false)">* </span>
+        <span style="color:#f96764" *ngIf="(show_sign == true)"> </span> -->
+        <div *ngFor="let option1 of filteredKeywords" style=" display: inline-block;"> 
+          <span style="color:#f96764 ;display: inline-block;
+          vertical-align: middle;" *ngIf="(option1 == option.id) && (show_sign == false) "  >* </span>
+           <span style="color:#f96764 ;display: inline-block;
+           vertical-align: middle;" *ngIf="(show_sign == true)"  > </span>
+        </div>  
+      <!-- </h1>   -->
+   <ion-icon slot="end" name="information-circle-outline" *ngIf="option_rel.refs_info" (click)="information_show(option_rel.refs_info)"></ion-icon> 
+  
+   
+</ion-label>
+</ion-item>
+
+</ion-card>
+<ion-card *ngFor="let option of ques.categorywithqestions" >
+  <div *ngFor="let option_rel of option.relatedquestions" >
+  <ion-radio-group  (ionChange)="radioGroupChange3($event,option,option_rel)" [(ngModel)]="option.select_new"  [ngModelOptions]="{standalone: true}" ngDefaultControl >  
+    <ion-item lines="none"class="ion-no-padding" style="margin-left: 10px;" >
+      
+      <!-- <ion-row  style="margin-right: -10px">
+         <ion-col size="4" >  -->
+          <!-- <ion-item lines="none" class="ion-no-padding"> -->
+            <ion-radio  mode="md"   value="{{option.id}}"></ion-radio> &nbsp;
+         <ion-label class="ion-text-wrap" >Option A</ion-label> 
+        <!-- </ion-item> -->
+        <!-- </ion-col> -->
+         <!-- <ion-col size="4" no-padding> -->
+          <!-- <ion-item lines="none" class="ion-no-padding"> -->
+          <ion-radio  mode="md"  value={{option_rel.id}} ></ion-radio>&nbsp; 
+         <ion-label class="ion-text-wrap" >Option B</ion-label>
+           <!-- </ion-item> -->
+        <!-- </ion-col>  -->
+        <!-- <ion-col size="4" no-padding> -->
+          <!-- <ion-item lines="none" class="ion-no-padding" > -->
+          <ion-radio  mode="md"  value="neither"></ion-radio>&nbsp; 
+         <ion-label class="ion-text-wrap" >Neither</ion-label>
+           <!-- </ion-item> -->
+        <!-- </ion-col>
+      </ion-row> -->
+  </ion-item> 
+
+  </ion-radio-group>
+</div>
+ </ion-card>
+</div>
+<!-- <ion-card *ngIf="(ques.multiple == '1') && (ques.options == '0')" >
+  <ng-container *ngFor="let option of ques.categorywithqestions">
+    
+    <ion-radio-group  (ionChange)="radioGroupChange2($event)" [(ngModel)]="selectedItem2" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+    
+        <ion-item lines="none" > 
+          <ion-row>
+          <ion-col size="11"> 
+            <ion-label class="ion-text-wrap"> {{option.title}}   
+              <span style="color:#f96764" *ngIf="!option.selectedItem">* </span>
+              <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon> 
+               
+              </ion-label>
+            </ion-col>
+          <ion-col size="1"> 
+            <ion-radio mode="md" [value]="option.id"></ion-radio>
+           </ion-col>
+        </ion-row>
+        </ion-item>
+         
+      </ion-radio-group> 
+      <div *ngIf="(showradio == true) && (add == option.id)"> 
+        <ion-radio-group  (ionChange)="radioGroupChange3($event,option)" [(ngModel)]="option.selectedItem3"  [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+        <ion-grid>         
+          <ion-row> 
+            <ion-col size="6" >
+              <ion-item lines="none">
+               
+              <ion-radio mode="md"  value="yes"></ion-radio> 
+              &nbsp; &nbsp; <ion-label >Yes</ion-label> 
+            </ion-item> 
+           </ion-col>
+            <ion-col size="6">
+              <ion-item lines="none">
+               
+               <ion-radio mode="md"  value="no"></ion-radio> 
+              &nbsp; &nbsp; <ion-label >No</ion-label>
+             </ion-item>
+            </ion-col> 
+          </ion-row>
+        </ion-grid>
+        </ion-radio-group>
+      </div> 
+</ng-container> 
+</ion-card> -->
+
+
+
+<!-- show question with related question dropdwon with yes and no type  -->
+<!-- <div *ngFor="let option of ques.categorywithqestions">
+  <ion-card  *ngIf="(ques.multiple == '0') && (ques.options == '0')">
+    <!-relatedquestions with question show null value->
+    <ion-item lines="none"*ngIf="option.relatedquestions.length == 0">    
+        <ion-label class="ion-text-wrap"> {{option.title}}
+          <h1 *ngFor="let option1 of filteredKeywords" > 
+            <span style="color:#f96764" *ngIf="option1 == option.id " >* </span>
+          </h1>  
+       <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon> 
+      
+       
+    </ion-label>
+
+    </ion-item>
+    <!- relatedquestions with question value ->
+    <ion-grid *ngIf="option.relatedquestions.length != 0" >
+  <ion-row>
+    <ion-col size="11">
+      <div *ngFor="let option1 of option.relatedquestions">
+       <ion-label style="font-size: 20px;"class="ion-text-wrap" *ngIf="(option.id != data1) && (option1.id != data1) ">Tap to select</ion-label>
+      <ion-item lines="none" *ngIf="(option.id == data1)" > 
+         <ion-label *ngIf="(title)" class="ion-text-wrap">{{ title }} 
+          <span style="color:#f96764" *ngIf="!option.selectedItem">* </span>
+            <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon>
+           </ion-label>
+      </ion-item>
+      <ion-item lines="none" *ngIf="(option1.id == data1) "> 
+          <ion-label *ngIf="(title)" class="ion-text-wrap">{{ title }} 
+            <span style="color:#f96764" *ngIf="!option.selectedItem">* </span>
+            <ion-icon slot="end" name="information-circle-outline" *ngIf="option1.refs_info" (click)="information_show(option1.refs_info)"></ion-icon> 
+            </ion-label>
+      </ion-item>
+      </div>
+    </ion-col> 
+    <ion-col size="1">
+     <ion-icon  (click)="presentAlertRadio(option.id)" name="caret-down-outline" style="zoom:2.0;"></ion-icon> 
+    </ion-col>
+    </ion-row>
+    </ion-grid>
+  
+<!- first value of dropdown option box from categorywithqestions ->
+  <div *ngIf="(option.relatedquestions.length == 0) || ((showradio == true) && (add == option.id) )">
+      <ion-radio-group  (ionChange)="radioGroupChange($event,option)" [(ngModel)]="option.selectedItem" [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+        <ion-grid>
+          <ion-row> 
+            <ion-col size="6"> 
+              <ion-item lines="none">
+              <ion-radio  mode="md" value="yes" checked="true">yes</ion-radio> 
+             &nbsp; &nbsp; <ion-label>Yes</ion-label>
+            </ion-item> </ion-col>
+            <ion-col size="6">
+              <ion-item lines="none">                 
+              <ion-radio  mode="md" value="no" ></ion-radio> 
+              &nbsp; &nbsp;<ion-label >No</ion-label>
+             </ion-item> </ion-col>
+          </ion-row>
+        </ion-grid> 
+      </ion-radio-group>
+      
+  </div>
+<!- second option  dropdown value from relatedquestions  ->
+  <div *ngFor="let option1 of option.relatedquestions">
+      <ion-radio-group  (ionChange)="radioGroupChange1($event,option1,option.cat,option.q_type)" *ngIf="((showradio) && (add == option1.id))"  [(ngModel)]="option1.selectedItem1" [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+        <ion-grid>
+          <ion-row>
+             <ion-col size="6"> 
+              <ion-item lines="none">
+                <ion-radio  mode="md"   value="yes"></ion-radio> 
+             &nbsp; &nbsp; <ion-label>Yes</ion-label> </ion-item>
+            </ion-col>
+             <ion-col size="6">
+              <ion-item lines="none">
+              <ion-radio  mode="md"  value="no"></ion-radio> 
+              &nbsp; &nbsp;<ion-label>No</ion-label>
+               </ion-item>
+            </ion-col> 
+          </ion-row>
+      </ion-grid> 
+    </ion-radio-group>
+  </div>
+  
+  
+  </ion-card>
+</div> -->
+
+
+
+<!-- show radio button with yes and no type -->
+<!-- <ion-card *ngIf="(ques.multiple == '1') && (ques.options == '0')" >
+  <ng-container *ngFor="let option of ques.categorywithqestions">
+    <ion-radio-group  (ionChange)="radioGroupChange2($event)" [(ngModel)]="selectedItem2" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+    
+        <ion-item lines="none" > 
+          <ion-row>
+          <ion-col size="11"> 
+            <ion-label class="ion-text-wrap"> {{option.title}}   
+              <span style="color:#f96764" *ngIf="!option.selectedItem">* </span>
+              <ion-icon slot="end" name="information-circle-outline" *ngIf="option.refs_info" (click)="information_show(option.refs_info)"></ion-icon> 
+               
+              </ion-label>
+            </ion-col>
+          <ion-col size="1"> 
+            <ion-radio mode="md" [value]="option.id"></ion-radio>
+           </ion-col>
+        </ion-row>
+        </ion-item>
+         
+      </ion-radio-group> 
+      <div *ngIf="(showradio == true) && (add == option.id)"> 
+        <ion-radio-group  (ionChange)="radioGroupChange3($event,option)" [(ngModel)]="option.selectedItem3"  [ngModelOptions]="{standalone: true}" ngDefaultControl > 
+        <ion-grid>         
+          <ion-row> 
+            <ion-col size="6" >
+              <ion-item lines="none">
+               
+              <ion-radio mode="md"  value="yes"></ion-radio> 
+              &nbsp; &nbsp; <ion-label >Yes</ion-label> 
+            </ion-item> 
+           </ion-col>
+            <ion-col size="6">
+              <ion-item lines="none">
+               
+               <ion-radio mode="md"  value="no"></ion-radio> 
+              &nbsp; &nbsp; <ion-label >No</ion-label>
+             </ion-item>
+            </ion-col> 
+          </ion-row>
+        </ion-grid>
+        </ion-radio-group>
+      </div> 
+</ng-container> 
+</ion-card> -->
+<!-- show previous ,next and submit button-->
+   <div style="text-align: center;">
+       <ion-button mode="ios" ion-button style="color:#f96764" outline="true" style='color:white;height:5vh;margin-right:16px;margin-bottom:60px;' (click)="previousQuestion(currentQuestion)" *ngIf="(currentQuestion < count || currentQuestion == count) && (currentQuestion != 1)"outline >Previous</ion-button>
+       <ion-button mode="ios" ion-button style="color:#f96764" outline="true" style='color:white;height:5vh;margin-right:16px;margin-bottom:60px;' (click)="nextQuestion_page(currentQuestion)" *ngIf="currentQuestion < count-1 || currentQuestion == count-1" outline >Next</ion-button>
+       <ion-button mode="ios" ion-button style="color:#f96764" outline="true" style='color:white;height:5vh;margin-right:16px;margin-bottom:60px;' (click)="completeTest(ques.id)" outline *ngIf="currentQuestion > count || currentQuestion == count">Submit</ion-button>
+   </div>
+   
+<!-- </form>   -->
+<ion-footer *ngIf="(showfooter == true)" style="border:black solid 1px;margin-left: 5px;margin-bottom:5px;width:98%;position:fixed;bottom: 0;left:0;right:0;background-color: white;">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="11">
+        <!-- <div *ngFor="let returnid_new of returnid">
+          <ion-label  class="ion-text-wrap" style="font-size: small;">{{ returnid_new.detail}}</ion-label>
+        </div>-->
+           
+        <span > <p style="font-size: small;" [innerHTML]="sanitize(returnid)"></p> </span> 
+        
+      </ion-col>
+      <ion-col size="1">
+        <div>
+          <ion-icon  slot="end" name="close" (click)="close()"></ion-icon>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <div>
+    <ion-item lines="none">
+      <ion-label  class="ion-text-wrap">{{ returnid}}</ion-label>
+    </ion-item> -->
+    <!-- <ion-item lines="none" *ngIf= "option.id == returnid">
+      <ion-label  class="ion-text-wrap">{{ option.description}}</ion-label>
+    </ion-item>
+    <div *ngFor="let option1 of option.relatedquestions" >
+      <ion-item lines="none" *ngIf= "option1.id == returnid">
+        <ion-label  class="ion-text-wrap">{{ option1.description}}</ion-label>
+      </ion-item>
+    </div> -->
+  <!-- </div> -->
+  
+</ion-footer>
+</ion-content>
+<!-- user dont get user current location  -->
+<ion-content *ngIf="((show == true) && (locationCoords.longitude == ''))">
+  <ion-img class="ion-padding" src="././assets/location.png"></ion-img>
+  <div style="text-align: center;">
+    <ion-button  outline="true" style="color:#f96764" shape="round" style="color:white;height:6vh;width:90%;margin:0 auto;"(click)="presentuserlocation()"><ion-icon name="location"></ion-icon>&nbsp;Enter your address</ion-button>
+  </div> 
+  <ion-item>
+    <ion-label><center>Or</center></ion-label>
+  </ion-item>
+<div style="text-align: center;">
+  <ion-button  outline="true" style="color:#f96764" shape="round" style="color:white;height:6vh;width:90%;margin:0 auto;"(click)="checkGPSPermission()"><ion-icon name="location"></ion-icon>&nbsp;Use my current location</ion-button>
+</div>
+</ion-content>
+<!-- user select information icon-->
+
+<!-- <ion-content *ngIf="(showmap == true)" >
+  <ion-header style="box-shadow:0 0 1px 0 rgba(0, 0, 0, .4);background: linear-gradient(to bottom, rgba(249, 29, 29, 0.9), rgba(255, 45, 45, 0.9));">
+    <ion-toolbar color="primary">
+     
+      <ion-buttons slot="start" (click)="onBackPressed()">       <ion-icon class="back-icon" name="arrow-back"></ion-icon>     </ion-buttons>
+ 
+        <ion-title style="font-weight:bold;font-size:small;" >qThe Location,Location,Location Scorecard</ion-title>
+        <ion-buttons slot="start">
+          <ion-menu-button autoHide="false"></ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+     
+  <div class="map-wrapper" style="width: 100%; height: 200px !important; border-bottom: 7px solid #FFF;">
+    <div  id="map" #map></div>
+  </div>
+  </ion-content> -->

@@ -1,0 +1,75 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <!-- <ion-buttons slot="start">
+            <ion-menu-button autoHide="false"></ion-menu-button>
+        </ion-buttons> -->
+        <center><img alt="logo" style="height: 40px ;" src="assets/housing.png"></center>
+        <!-- <ion-title style="font-weight:bold;font-size:small;">The Location,Location,Location Scorecard</ion-title> -->
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <!-- <div class="header-00" style="background-color: #202020;">
+        <h1> <span style="font-weight: 500;color:white;">Score Board</span> </h1>
+    </div> -->
+    <div class="header-00">
+        <h1> <span style="font-weight: 400;">Your </span> <img alt="logo" style="height: 22px ;" src="assets/hou (1).png"> <span style="font-weight: 400;">Score Is:</span> </h1>
+        <!-- <span style="font-weight: 300;">Calcu</span><span style="font-weight: 300;color:red">lot<sup style="font-weight: 200;color:black">TM</sup> </span> -->
+       
+    </div>
+    <div  class="header-00"> 
+        <!-- <h1 *ngIf=!resultData> <span style="font-weight: 500;">0</span> </h1> -->
+       <div *ngIf=resultData>
+        <h1  > <span style="font-weight: 500;">{{resultData}}</span> </h1>
+        <p>The higher the score, the more liveable and desirable is the particular location. Compare your score to that for other locations.</p>
+        
+            <ion-item lines="none" >
+                <ion-checkbox (click)="addValue($event)" mode="md"></ion-checkbox>
+              <ion-label class="ion-text-wrap" style="margin-left: 10px;">Send scoring pdf to your email.</ion-label>
+              
+            </ion-item>
+            <form *ngIf="isChecked == false" >
+                <ion-item lines="full">
+                  <ion-label position="floating">Email</ion-label>
+                  <ion-input type="email" pattern="[A-Za-z0-9._%+-]{3,}@[a-zA-Z]{3,}([.]{1}[a-zA-Z]{2,}|[.]{1}[a-zA-Z]{2,}[.]{1}[a-zA-Z]{2,})" name="email" [(ngModel)]="postData.email" required></ion-input>
+                </ion-item>
+                <ion-row>
+                    <ion-col size="6">
+                        <div style="color:#f96764;font-size: small;align-items: flex-start;" *ngIf=error>
+                            {{error}}
+                        </div>
+                     </ion-col>
+                     
+                   </ion-row>
+               
+                <ion-row>
+                 <ion-col>
+                    <center>  <ion-button mode="ios" ion-button type="submit" style="color:#f96764" outline="true" style='color:white;height:5vh;margin-right:16px;' size="small" (click)="login()" outline >Send</ion-button></center>
+                  </ion-col>
+                  
+                </ion-row>
+            
+                <!-- <small>
+                  Please provide the email address that we used to send score in your mail.
+                </small> -->
+              </form>
+       </div> 
+    </div>
+    <!-- <div  class="header-00">
+   
+    </div> -->
+</ion-content>
+<ion-footer >
+    <!-- <table class="table">
+       
+        <tbody>
+            <tr *ngFor="let item of pdfFiles">
+                <th scope="row">{{ item.name }}</th>
+                <td>
+                   <button type="button" class="btn btn-success btn-sm" (click)="getPermission()">
+                       sample.pdf
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table> -->
+</ion-footer>
