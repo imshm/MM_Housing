@@ -129,6 +129,9 @@ export class CategoryPage implements OnInit {
 
   initi(latitude_origin, longitude_origin)
   {
+    /*this.show = false;
+    this.locationCoords.latitude = latitude_origin;
+    this.locationCoords.longitude = longitude_origin;*/
     this.presentLoadingDefault_init();
     const body = {
       latitude_origin,
@@ -266,7 +269,7 @@ export class CategoryPage implements OnInit {
       };
       this.api.postApi('categoryquestion_googleapi', body).then((res: any) => {
         this.helper.dismissLoading();
-        if (res && res.status && res.status == 200 && res.data) {
+        if (res && res.status && res.status === 200 && res.data) {
           return resolve(res.data);
         } else {
           return resolve(null);
@@ -286,14 +289,14 @@ export class CategoryPage implements OnInit {
     const quesCat = ques?.categorywithqestions;
     for (const q of quesCat) {
       if (q.q_type === 'dont_ask' && !q.api_response) {
-        await this.zone.run(async () => {
-          q.api_response = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
-          this.helper.dismissLoading();
+        const ar = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
+        this.zone.run( () => {
+          q.api_response = ar;
         });
+        console.log('ar', ar);
       } else {
         this.zone.run(() => {
           this.ques = ques;
-          this.helper.dismissLoading();
         });
       }
     }
