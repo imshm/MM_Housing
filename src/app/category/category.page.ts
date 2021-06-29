@@ -260,7 +260,7 @@ export class CategoryPage implements OnInit {
 
   getApiData(title, qType, latitude, longitude) {
     return new Promise(resolve => {
-      this.helper.presentLoadingWithOptions().catch(() => {});
+      // this.helper.presentLoadingWithOptions().catch(() => {});
       const body = {
         latitude_origin: latitude,
         longitude_origin: longitude,
@@ -268,14 +268,14 @@ export class CategoryPage implements OnInit {
         qtype: qType
       };
       this.api.postApi('categoryquestion_googleapi', body).then((res: any) => {
-        this.helper.dismissLoading();
+        // this.helper.dismissLoading();
         if (res && res.status && res.status === 200 && res.data) {
           return resolve(res.data);
         } else {
           return resolve(null);
         }
       }).catch( async (err) => {
-        this.helper.dismissLoading();
+        // this.helper.dismissLoading();
         return resolve(null);
       });
     });
@@ -287,6 +287,7 @@ export class CategoryPage implements OnInit {
     this.currentQuestion = currentQuestion;
     const ques = this.questionList[currentQuestion - 1];
     const quesCat = ques?.categorywithqestions;
+    this.helper.presentLoadingWithOptions().catch(() => {});
     for (const q of quesCat) {
       if (q.q_type === 'dont_ask' && !q.api_response) {
         const ar = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
@@ -300,6 +301,7 @@ export class CategoryPage implements OnInit {
         });
       }
     }
+    this.helper.dismissLoading();
   }
 // question load
   async loadQuestionOld(currentQuestion){
