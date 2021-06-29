@@ -129,9 +129,9 @@ export class CategoryPage implements OnInit {
 
   initi(latitude_origin, longitude_origin)
   {
-    /*this.show = false;
+    this.show = false;
     this.locationCoords.latitude = latitude_origin;
-    this.locationCoords.longitude = longitude_origin;*/
+    this.locationCoords.longitude = longitude_origin;
     this.presentLoadingDefault_init();
     const body = {
       latitude_origin,
@@ -258,22 +258,18 @@ export class CategoryPage implements OnInit {
     return found;
   }
 
-  getApiData(title, qType, latitude, longitude) {
+  getApiData(title, qType) {
     return new Promise(resolve => {
       // this.helper.presentLoadingWithOptions().catch(() => {});
       const body = {
-        latitude_origin: latitude,
-        longitude_origin: longitude,
+        latitude_origin: this.locationCoords.latitude,
+        longitude_origin: this.locationCoords.longitude,
         title_dont_ask: title,
         qtype: qType
       };
       this.api.postApi('categoryquestion_googleapi', body).then((res: any) => {
         // this.helper.dismissLoading();
-        if (res && res.status && res.status === 200 && res.data) {
-          return resolve(res.data);
-        } else {
-          return resolve(null);
-        }
+        return resolve((res && res.status && res.status === 200 && res.data) ? res.data : null);
       }).catch( async (err) => {
         // this.helper.dismissLoading();
         return resolve(null);
@@ -290,15 +286,9 @@ export class CategoryPage implements OnInit {
     this.helper.presentLoadingWithOptions().catch(() => {});
     for (const q of quesCat) {
       if (q.q_type === 'dont_ask' && !q.api_response) {
-        const ar = await (this.getApiData(q.title, q.q_type, this.locationCoords.latitude, this.locationCoords.longitude));
-        this.zone.run( () => {
-          q.api_response = ar;
-        });
-        console.log('ar', ar);
+        q.api_response = await this.getApiData(q.title, q.q_type);
       } else {
-        this.zone.run(() => {
-          this.ques = ques;
-        });
+        this.ques = ques;
       }
     }
     this.helper.dismissLoading();
@@ -545,7 +535,7 @@ export class CategoryPage implements OnInit {
       }
       else
       {
-        const unique = tempArray.filter(function(elem, index, self) {
+        const unique = tempArray.filter((elem, index, self) => {
           return index === self.indexOf(elem);
         });
         this.filteredKeywords = tempArray2.filter((word) => !unique.includes(word));
@@ -573,7 +563,7 @@ export class CategoryPage implements OnInit {
       }
       else
       {
-        const unique = tempArray.filter(function(elem, index, self) {
+        const unique = tempArray.filter((elem, index, self) => {
           return index === self.indexOf(elem);
         });
         this.filteredKeywords = tempArray2.filter((word) => !unique.includes(word));
@@ -587,7 +577,7 @@ export class CategoryPage implements OnInit {
     else if ((option == 0 ) && (multiple == 0))
     {
       this.show_sign = false;
-      const unique = tempArray.filter(function(elem, index, self) {
+      const unique = tempArray.filter((elem, index, self) => {
         return index === self.indexOf(elem);
       });
       // console.log('tempArray,tempArray2!' ,unique ,tempArray2);

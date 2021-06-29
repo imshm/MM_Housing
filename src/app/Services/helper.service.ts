@@ -153,7 +153,7 @@ export class HelperService {
   dismissLoading() {
     setTimeout(() => {
       try { this.loading.dismiss().catch(() => {}); } catch (e) {}
-    }, 200);
+    }, 500);
   }
   onScrollCloseKeyBoard() {
     if (this.platform.is('android')) {
